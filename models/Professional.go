@@ -8,6 +8,6 @@ type Professional struct {
 	Email     string
 	Specialty string
 	Telephone uint
-	Quotes    []Quote
+	Appointment    []Appointment
 	VetID     uint
 }

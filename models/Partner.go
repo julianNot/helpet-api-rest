@@ -11,5 +11,7 @@ type Partner struct {
 	Email       string `gorm:"not null" json:"email_partner"`
 	Nit         uint   `gorm:"not null" json:"nit_partner"`
 	IsActive    bool   `gorm:"not null" json:"isActive_partner"`
-	Vets        []Vet
+	Password    string `gorm:"not null" json:"password"`
+	Username    string `gorm:"not null" json:"username"`
+	Vets        []Vet  `json:"vets"`
 }

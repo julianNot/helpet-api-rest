@@ -31,14 +31,15 @@ func main() {
 	db.DB.AutoMigrate(models.Attendant{})
 	db.DB.AutoMigrate(models.Pet{})
 	db.DB.AutoMigrate(models.Post{})
-	db.DB.AutoMigrate(models.Quote{})
+	db.DB.AutoMigrate(models.Appointment{})
 
 	router := mux.NewRouter()
 
+	// Routes Partners
 	router.HandleFunc("/partners", routes.GetPartnersHandler).Methods("GET")
 	router.HandleFunc("/partners/{id}", routes.GetPartnerHandler).Methods("GET")
-	router.HandleFunc("/partners", routes.GetPartnerHandler).Methods("POST")
-	router.HandleFunc("/partners/{id}", routes.EditPartnerHandler).Methods("PUT")
+	router.HandleFunc("/partners", routes.CreatePartnerHandler).Methods("POST")
+	router.HandleFunc("/partners/{id}", routes.UpdatePartnerHandler).Methods("PUT")
 	router.HandleFunc("/partners/{id}", routes.DeletePartnerHandler).Methods("DELETE")
 
 	http.ListenAndServe(":3000", router)

@@ -17,6 +17,6 @@ type Vet struct {
 	Telephone        uint           `gorm:"not null" json:"telephone_vet"`
 	Blog             []Post         `json:"blog_vet"`
 	Professionals    []Professional `json:"profesionals_vet"`
-	Quotes           []Quote        `json:"quotes_vet"`
-	PartnerID        uint						`json:"partner_id_vet"`
+	Appointment      []Appointment  `json:"Appointment_vet"`
+	PartnerID        uint           `json:"partner_id_vet"`
 }

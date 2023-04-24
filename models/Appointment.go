@@ -2,10 +2,11 @@ package models
 
 import "gorm.io/gorm"
 
-type Quote struct {
+type Appointment struct {
 	gorm.Model
 	Service        string
 	Date           string
 	VetID          uint
 	ProfessionalID uint
+	AttendantID    uint
 }
