@@ -1,27 +1,62 @@
 package auth
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
+	"net/http"
+	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
+	"github.com/julianNot/helpet-api-rest/db"
 	"github.com/julianNot/helpet-api-rest/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Authenticate(username string, password string) (*models.Partner, error) {
-	// Busca el usuario en la base de datos por su nombre de usuario
-	var partner models.Partner
-	result := db.Where("username = ?", username).First(&partner)
-	if result.Error != nil {
-		return nil, result.Error
-	}
+func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 
-	// Comprueba si la contraseña es correcta
-	err := bcrypt.CompareHashAndPassword([]byte(partner.Password), []byte(password))
+	errEnv := godotenv.Load()
+	if errEnv != nil {
+		log.Fatal("Error loading .env file")
+	}
+	mySecretKey := os.Getenv("MY_SECRET_KEY")
+
+	var creds struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
-		return nil, err
-		fmt.Println()
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
-	// Devuelve el usuario autenticado
-	return &partner, nil
+	var partner models.Partner
+	db.DB.Where("username = ?", creds.Username).First(&partner)
+	if partner.ID == 0 || !checkPasswordHash(creds.Password, partner.Password) {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Invalid Credentials"))
+		return
+	}
+
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["partner_id"] = partner.ID
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	tokenString, err := token.SignedString([]byte(mySecretKey))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
