@@ -12,7 +12,7 @@ import (
 
 func GetPartnersHandler(w http.ResponseWriter, r *http.Request) {
 	var partners []models.Partner
-	db.DB.Find(&partners)
+	db.DB.Preload("Vets").Find(&partners)
 	json.NewEncoder(w).Encode(partners)
 }
 
