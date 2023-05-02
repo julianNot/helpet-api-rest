@@ -36,8 +36,10 @@ func main() {
 
 	router := mux.NewRouter()
 
-	// Routes Partners
+	// Login Partners
 	router.HandleFunc("/auth/partners", auth.AuthenticatePartnerHandler).Methods("POST")
+	
+	// Routes Partners
 	router.HandleFunc("/partners", routes.GetPartnersHandler).Methods("GET")
 	router.HandleFunc("/partners/{id}", routes.GetPartnerHandler).Methods("GET")
 	router.HandleFunc("/partners", routes.CreatePartnerHandler).Methods("POST")
@@ -52,6 +54,7 @@ func main() {
 	// Routes Professionals
 	router.HandleFunc("/professionals", routes.GetProfessionalsHandler).Methods("GET")
 	router.HandleFunc("/professionals/{id}", routes.GetProfessionalHandler).Methods("GET")
+	router.HandleFunc("/professionals", routes.CreateProfessionalHandler).Methods("POST")
 	// TODO:
 
 	// Routes Posts
@@ -59,6 +62,21 @@ func main() {
 	router.HandleFunc("/posts/{id}", routes.GetPostHandler).Methods("GET")
 	router.HandleFunc("/posts", routes.CreatePostHandler).Methods("POST")
 	// TODO:
+
+	// Routes Pets
+	router.HandleFunc("/pets", routes.GetPetsHandler).Methods("GET")
+	router.HandleFunc("/pets/{id}", routes.GetPetHandler).Methods("GET")
+	router.HandleFunc("/pets", routes.CreatePetHandler).Methods("POST")
+
+	// Routes Attendants
+	router.HandleFunc("/attendants", routes.GetAttendantsHandler).Methods("GET")
+	router.HandleFunc("/attendants/{id}", routes.GetAttendantHandler).Methods("GET")
+	router.HandleFunc("/attendants", routes.CreateAttendantHandler).Methods("POST")
+
+	// Routes Appointments
+	router.HandleFunc("/appointments", routes.GetAppointmentsHandler).Methods("GET")
+	router.HandleFunc("/appointments/{id}", routes.GetAppointmentHandler).Methods("GET")
+	router.HandleFunc("/appointments", routes.CreateAppointmentHandler).Methods("POST")
 
 	http.ListenAndServe(":3000", router)
 }

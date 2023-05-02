@@ -11,14 +11,14 @@ import (
 
 func GetVetsHandler(w http.ResponseWriter, r *http.Request) {
 	var vets []models.Vet
-	db.DB.Find(&vets)
+	db.DB.Preload("Professionals").Preload("Appointment").Find(&vets)
 	json.NewEncoder(w).Encode(vets)
 }
 
 func GetVetHandler(w http.ResponseWriter, r *http.Request) {
 	var vet models.Professional
 	params := mux.Vars(r)
-	db.DB.First(&vet, params["id"])
+	db.DB.Preload("Professionals").Preload("Appointment").First(&vet, params["id"])
 	if vet.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Vet Not Found"))
