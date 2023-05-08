@@ -11,6 +11,7 @@ import (
 	"github.com/julianNot/helpet-api-rest/auth"
 	"github.com/julianNot/helpet-api-rest/models"
 	"github.com/julianNot/helpet-api-rest/db"
+	"github.com/julianNot/helpet-api-rest/middlewares"
 )
 
 func main() {
@@ -35,10 +36,13 @@ func main() {
 	db.DB.AutoMigrate(models.Appointment{})
 
 	router := mux.NewRouter()
-
+	
 	// Login Partners
 	router.HandleFunc("/auth/partners", auth.AuthenticatePartnerHandler).Methods("POST")
 	
+	//Middleware Auth
+	router.Use(middlewares.AuthMiddlewarePartner)
+
 	// Routes Partners
 	router.HandleFunc("/partners", routes.GetPartnersHandler).Methods("GET")
 	router.HandleFunc("/partners/{id}", routes.GetPartnerHandler).Methods("GET")
@@ -78,5 +82,9 @@ func main() {
 	router.HandleFunc("/appointments/{id}", routes.GetAppointmentHandler).Methods("GET")
 	router.HandleFunc("/appointments", routes.CreateAppointmentHandler).Methods("POST")
 
-	http.ListenAndServe(":3000", router)
+	http.ListenAndServe(":3001", router)
+}
+
+func authMiddleware() {
+	panic("unimplemented")
 }
