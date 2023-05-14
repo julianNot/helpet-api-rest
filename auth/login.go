@@ -41,6 +41,13 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var nitValue int
+	if partner.Nit != 0 {
+		nitValue = 1
+	} else {
+		nitValue = 0
+	}
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -53,7 +60,12 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
+	response := map[string]interface{}{
+		"token":     tokenString,
+		"type_user": nitValue,
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func checkPasswordHash(password, hash string) bool {
