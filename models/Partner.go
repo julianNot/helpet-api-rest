@@ -6,12 +6,12 @@ import (
 
 type Partner struct {
 	gorm.Model
-	Name        string `gorm:"not null" json:"name_partner"`
+	Name        string `json:"name_partner"`
 	NameCompany string `gorm:"not null" json:"name_company_partner"`
 	Email       string `gorm:"not null" json:"email_partner"`
 	Nit         uint   `gorm:"not null" json:"nit_partner"`
-	IsActive    bool   `gorm:"not null" json:"isActive_partner"`
+	IsActive    bool   `json:"isActive_partner"`
 	Password    string `gorm:"not null" json:"password"`
-	Username    string `gorm:"not null" json:"username"`
+	Username    string `json:"username"`
 	Vets        []Vet  `json:"vets"`
 }
