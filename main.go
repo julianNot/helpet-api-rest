@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/julianNot/helpet-api-rest/db"
 	"github.com/julianNot/helpet-api-rest/routes"
+	"github.com/julianNot/helpet-api-rest/helpers"
 )
 
 func main() {
@@ -14,5 +15,5 @@ func main() {
 	router := mux.NewRouter()
 	routes.SetRouter(router)
 
-	http.ListenAndServe(":3000", router)
+	http.ListenAndServe(":"+helpers.GetPortServer(), router)
 }
