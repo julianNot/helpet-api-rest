@@ -42,11 +42,11 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var nitValue int
-    if partner.Nit != 0 {
-        nitValue = 1
-    } else {
-        nitValue = 0
-    }
+	if partner.Nit != 0 {
+		nitValue = 1
+	} else {
+		nitValue = 0
+	}
 
 	token := jwt.New(jwt.SigningMethodHS256)
 
@@ -61,8 +61,8 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := map[string]interface{}{
-		"token": tokenString,
-		"type_user":   nitValue,
+		"token":     tokenString,
+		"type_user": nitValue,
 	}
 
 	json.NewEncoder(w).Encode(response)
