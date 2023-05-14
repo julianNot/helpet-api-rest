@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/julianNot/helpet-api-rest/helpers"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,5 +20,6 @@ func DBConnection(host, user, password, nameDb, port string) {
 		log.Fatal(err)
 	} else {
 		log.Println("Maria DB Connected")
+		log.Println("Listen " + helpers.GetPortServer() + " Port")
 	}
 }

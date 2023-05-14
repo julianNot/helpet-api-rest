@@ -23,7 +23,7 @@ func AuthMiddlewarePartner(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		tokenString := r.Header.Get("Authorization")
-		if r.URL.Path == "/auth/partners" {
+		if r.URL.Path == "/api/v1/auth/partners" {
 			next.ServeHTTP(w, r)
 			return
 		}
