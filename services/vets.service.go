@@ -18,7 +18,7 @@ func GetVetsHandler(w http.ResponseWriter, r *http.Request) {
 func GetVetHandler(w http.ResponseWriter, r *http.Request) {
 	var vet models.Professional
 	params := mux.Vars(r)
-	db.DB.Preload("Professionals").Preload("Appointment").First(&vet, params["id"])
+	db.DB.Preload("Professionals").Preload("Appointment").Preload("Blog").First(&vet, params["id"])
 	if vet.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Vet Not Found"))
@@ -43,6 +43,24 @@ func GetProfessinalsVet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(&partner.Vets[0].Professionals)
+}
+
+func GetPostsVet(w http.ResponseWriter, r *http.Request) {
+	var partner models.Partner
+	params := mux.Vars(r)
+	db.DB.Preload("Vets").First(&partner, params["id"])
+	if partner.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Partner Not Found"))
+		return
+	}
+	db.DB.Preload("Blog").First(&partner.Vets, partner.Vets[0].ID)
+	if partner.Vets == nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Vet Not Found"))
+		return
+	}
+	json.NewEncoder(w).Encode(&partner.Vets[0].Blog)
 }
 
 func CreateVetHandler(w http.ResponseWriter, r *http.Request) {
