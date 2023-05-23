@@ -9,4 +9,5 @@ func setRouterPost(apiRouter *mux.Router) {
 	apiRouter.HandleFunc("/posts", services.GetAllPostsHandler).Methods("GET")
 	apiRouter.HandleFunc("/posts/{id}", services.GetPostHandler).Methods("GET")
 	apiRouter.HandleFunc("/posts", services.CreatePostHandler).Methods("POST")
+	apiRouter.HandleFunc("/posts/{id}", services.DeletePostHandler).Methods("DELETE")
 }
