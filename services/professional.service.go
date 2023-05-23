@@ -39,3 +39,30 @@ func CreateProfessionalHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(&professional)
 }
+
+func UpdateProfessionalHandler(w http.ResponseWriter, r *http.Request) {
+	var professional models.Professional
+	params := mux.Vars(r)
+	db.DB.First(&professional, params["id"])
+	if professional.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Professional Not Found"))
+		return
+	}
+	json.NewDecoder(r.Body).Decode(&professional)
+	db.DB.Save(&professional)
+	json.NewEncoder(w).Encode(&professional)
+}
+
+func DeleteProfessionalHandler(w http.ResponseWriter, r *http.Request) {
+	var professional models.Professional
+	params := mux.Vars(r)
+	db.DB.First(&professional, params["id"])
+	if professional.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Professional Not Found"))
+		return
+	}
+	db.DB.Unscoped().Delete(&professional)
+	w.WriteHeader(http.StatusNoContent)
+}
