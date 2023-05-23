@@ -39,3 +39,16 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(&post)
 }
+
+func DeletePostHandler(w http.ResponseWriter, r *http.Request) {
+	var post models.Post
+	params := mux.Vars(r)
+	db.DB.First(&post, params["id"])
+	if post.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Post Not Found"))
+		return
+	}
+	db.DB.Unscoped().Delete(&post)
+	w.WriteHeader(http.StatusNoContent)
+}
