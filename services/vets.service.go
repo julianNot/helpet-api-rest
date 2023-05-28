@@ -75,3 +75,30 @@ func CreateVetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(&vet)
 }
+
+func UpdateVetHandler(w http.ResponseWriter, r *http.Request) {
+	var vet models.Vet
+	params := mux.Vars(r)
+	db.DB.First(&vet, params["id"])
+	if vet.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Vet Not Found"))
+		return
+	}
+	json.NewDecoder(r.Body).Decode(&vet)
+	db.DB.Save(&vet)
+	json.NewEncoder(w).Encode(&vet)
+}
+
+func DeleteVetHandler(w http.ResponseWriter, r *http.Request) {
+	var vet models.Vet
+	params := mux.Vars(r)
+	db.DB.First(&vet, params["id"])
+	if vet.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Vet Not Found"))
+		return
+	}
+	db.DB.Unscoped().Delete(&vet)
+	w.WriteHeader(http.StatusNoContent)
+}
