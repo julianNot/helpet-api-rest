@@ -10,6 +10,7 @@ func setRouterVet(apiRouter *mux.Router) {
 	apiRouter.HandleFunc("/vets/{id}", services.GetVetHandler).Methods("GET")
 	apiRouter.HandleFunc("/vets/{id}", services.UpdateVetHandler).Methods("PUT")
 	apiRouter.HandleFunc("/vets/Professionals/{id}", services.GetProfessinalsVet).Methods("GET")
+	apiRouter.HandleFunc("/vets/partner/{id}", services.GetVetsByPartner).Methods("GET")
 	apiRouter.HandleFunc("/vets/posts/{id}", services.GetPostsVet).Methods("GET")
 	apiRouter.HandleFunc("/vets", services.CreateVetHandler).Methods("POST")
 	apiRouter.HandleFunc("/vets/{id}", services.DeleteVetHandler).Methods("DELETE")

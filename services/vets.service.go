@@ -45,6 +45,18 @@ func GetProfessinalsVet(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&partner.Vets[0].Professionals)
 }
 
+func GetVetsByPartner(w http.ResponseWriter, r *http.Request) {
+	var partner models.Partner
+	params := mux.Vars(r)
+	db.DB.Preload("Vets").First(&partner, params["id"])
+	if partner.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Partner Not Found"))
+		return
+	}
+	json.NewEncoder(w).Encode(&partner.Vets)
+}
+
 func GetPostsVet(w http.ResponseWriter, r *http.Request) {
 	var partner models.Partner
 	params := mux.Vars(r)
