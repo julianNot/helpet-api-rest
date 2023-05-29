@@ -57,7 +57,12 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["partner_id"] = partner.ID
+	if nitValue == 1 {
+		claims["partner_id"] = partner.ID
+		claims["vet_id"] = partner.Vets[0].ID
+	} else {
+		claims["user_id"] = attendant.ID
+	}
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	tokenString, err := token.SignedString([]byte(mySecretKey))
