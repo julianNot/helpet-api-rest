@@ -16,7 +16,7 @@ func GetVetsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetVetHandler(w http.ResponseWriter, r *http.Request) {
-	var vet models.Professional
+	var vet models.Vet
 	params := mux.Vars(r)
 	db.DB.Preload("Professionals").Preload("Appointment").Preload("Blog").First(&vet, params["id"])
 	if vet.ID == 0 {
