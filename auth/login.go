@@ -34,19 +34,25 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var partner models.Partner
+	var attendant models.Attendant
 	db.DB.Where("username = ?", creds.Username).First(&partner)
+	db.DB.Where("username = ?", creds.Username).First(&attendant)
 	if partner.ID == 0 || !checkPasswordHash(creds.Password, partner.Password) {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("Invalid Credentials"))
-		return
+		if attendant.ID == 0 || checkPasswordHash(creds.Password, partner.Password) {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Invalid Credentials"))
+			return
+		}
 	}
 
 	var nitValue int
 	if partner.Nit != 0 {
 		nitValue = 1
-	} else {
+	} 
+	if attendant.ID != 0 {
 		nitValue = 0
 	}
+	
 
 	token := jwt.New(jwt.SigningMethodHS256)
 

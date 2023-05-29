@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/julianNot/helpet-api-rest/db"
 	"github.com/julianNot/helpet-api-rest/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetAttendantsHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,8 +31,10 @@ func GetAttendantHandler(w http.ResponseWriter, r *http.Request) {
 func CreateAttendantHandler(w http.ResponseWriter, r *http.Request) {
 	var attendant models.Attendant
 	json.NewDecoder(r.Body).Decode(&attendant)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(attendant.Password), bcrypt.DefaultCost)
+	attendant.Password = string(hashedPassword)
 	createdAttendant := db.DB.Create(&attendant)
-	err := createdAttendant.Error
+	err = createdAttendant.Error
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))

@@ -10,4 +10,6 @@ type Attendant struct {
 	Pet         []Pet         `json:"pets_attendant"`
 	Appointment []Appointment `json:"appointments_attendant"`
 	NamePet     string        `gorm:"default:'Sin nombre'" json:"name_pet_attendant"`
+	Username    string        `json:"username"`
+	Password    string        `json:"password"`
 }
