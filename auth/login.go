@@ -35,10 +35,10 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 
 	var partner models.Partner
 	var attendant models.Attendant
-	db.DB.Where("username = ?", creds.Username).First(&partner)
+	db.DB.Preload("Vets").Where("username = ?", creds.Username).First(&partner)
 	db.DB.Where("username = ?", creds.Username).First(&attendant)
 	if partner.ID == 0 || !checkPasswordHash(creds.Password, partner.Password) {
-		if attendant.ID == 0 || checkPasswordHash(creds.Password, partner.Password) {
+		if attendant.ID == 0 || !checkPasswordHash(creds.Password, partner.Password) {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Invalid Credentials"))
 			return
@@ -59,7 +59,9 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 	claims := token.Claims.(jwt.MapClaims)
 	if nitValue == 1 {
 		claims["partner_id"] = partner.ID
-		claims["vet_id"] = partner.Vets[0].ID
+		if partner.Vets[0].ID != 0 {
+			claims["vet_id"] = partner.Vets[0].ID
+		}
 	} else {
 		claims["user_id"] = attendant.ID
 	}
