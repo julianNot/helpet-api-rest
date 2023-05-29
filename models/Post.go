@@ -9,5 +9,4 @@ type Post struct {
 	Description string `gorm:"not null" json:"description_post"`
 	Imagen      string `json:"imagen_post"`
 	VetID       uint   `json:"vet_id_post"`
-	AttendantID uint   `json:"attendant_id_post"`
 }
