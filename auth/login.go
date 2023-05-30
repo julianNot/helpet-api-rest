@@ -56,9 +56,11 @@ func AuthenticatePartnerHandler(w http.ResponseWriter, r *http.Request) {
 
 	claims := token.Claims.(jwt.MapClaims)
 	
-	if nitValue == 1 && len(partner.Vets) > 0{
+	if nitValue == 1{
 		claims["partner_id"] = partner.ID
-		claims["vet_id"] = partner.Vets[0].ID
+		if len(partner.Vets) > 0 {
+			claims["vet_id"] = partner.Vets[0].ID
+		}
 	} else {
 		claims["user_id"] = attendant.ID
 	}
