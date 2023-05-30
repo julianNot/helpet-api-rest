@@ -8,5 +8,6 @@ import (
 func setRouterAppointment(apiRouter *mux.Router) {
 	apiRouter.HandleFunc("/appointments", services.GetAppointmentsHandler).Methods("GET")
 	apiRouter.HandleFunc("/appointments/{id}", services.GetAppointmentHandler).Methods("GET")
+	apiRouter.HandleFunc("/appointments/attendants/{id}", services.GetAttendantsByAttendant).Methods("GET")
 	apiRouter.HandleFunc("/appointments", services.CreateAppointmentHandler).Methods("POST")
 }

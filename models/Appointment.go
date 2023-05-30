@@ -13,5 +13,6 @@ type Appointment struct {
 	Telephone      string `json:"telephone_attendant_appointment"`
 	VetID          uint   `json:"vet_id_appointment"`
 	ProfessionalID uint   `json:"professional_id_appointment"`
+	AttendantID    uint		`json:"attendant_id_appointment"`
 	NameAtte       string `json:"name_attendant"`
 }

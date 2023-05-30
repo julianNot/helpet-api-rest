@@ -27,6 +27,25 @@ func GetAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&appointment)
 }
 
+func GetAttendantsByAttendant(w http.ResponseWriter, r *http.Request) {
+	var attendant models.Attendant
+	params := mux.Vars(r)
+	db.DB.Preload("Appointment").First(&attendant, params["id"])
+	if attendant.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Appointment Not Found"))
+		return
+	}
+	db.DB.Find(&attendant.Appointment)
+	if attendant.Appointment == nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Appointment Not Found"))
+		return
+	}
+	json.NewEncoder(w).Encode(&attendant.Appointment)
+}
+
+
 func CreateAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	var appointment models.Appointment
 	json.NewDecoder(r.Body).Decode(&appointment)
