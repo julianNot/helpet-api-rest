@@ -4,10 +4,14 @@ import "gorm.io/gorm"
 
 type Appointment struct {
 	gorm.Model
-	Service        string `gorm:"not null" json:"service_appointment"`
-	Date           string `gorm:"not null" json:"date_appointment"`
-	VetID          uint   `gorm:"not null" json:"vet_id_appointment"`
-	ProfessionalID uint   `gorm:"not null" json:"professional_id_appointment"`
-	AttendantID    uint   `gorm:"not null" json:"attendant_id_appointment"`
-	Pet            Pet    `json:"pet_appointment"`
+	Service        string `json:"service_appointment"`
+	Date           string `json:"date_appointment"`
+	Name           string `json:"name_pet_appointment"`
+	Male           string `json:"male_pet_appointment"`
+	Description    string `json:"description_pet_appointment"`
+	NameAttendant  string `json:"name_attendant_appointment"`
+	Telephone      string `json:"telephone_attendant_appointment"`
+	VetID          uint   `json:"vet_id_appointment"`
+	ProfessionalID uint   `json:"professional_id_appointment"`
+	NameAtte       string `json:"name_attendant"`
 }
